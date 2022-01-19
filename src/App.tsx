@@ -66,10 +66,6 @@ function App() {
         fs.removeFile(file.file_path)
       })
   }
-  // 刷新目录
-  const refreshDir = (selectedDir: string) => () => {
-    showDir(selectedDir)
-  }
 
   // 显示目录
   const showDir = (dir: string) => {
@@ -86,11 +82,14 @@ function App() {
   }
 
   const cleanupPhotos = () => {
-    fileList.forEach(file => {
-      checkImage(file)
+    const tasks = fileList.map(file => {
+      return checkImage(file)
         .then(createImageDir(file, selectedDir))
         .then(moveImage(file))
-        .then(refreshDir(selectedDir))
+    })
+
+    Promise.all(tasks).then(() => {
+      showDir(selectedDir)
     })
   }
 
@@ -106,7 +105,12 @@ function App() {
             </button>
             {!isEmpty && (
               <div className="text-sm">
-                当前目录总共 {fileList.length} 张照片
+                当前目录总共
+                {
+                  fileList.filter((file: any) => file.file_type === 'Image')
+                    .length
+                }
+                张照片
               </div>
             )}
           </div>

@@ -93,8 +93,8 @@ pub async fn get_type(file_basename: String, is_dir: bool) -> String {
     if file_type_according_to_name.is_some() {
       return file_type_according_to_name.unwrap().to_string();
     } else {
-      let file_extension = file_basename.split(".").last().unwrap();
-      let file_type_according_to_extension = FILE_TYPES.get(file_extension);
+      let file_extension = file_basename.split(".").last().unwrap().to_lowercase();
+      let file_type_according_to_extension = FILE_TYPES.get(&file_extension);
       match file_type_according_to_extension {
         Some(file_type) => file_type.to_string(),
         None => {
