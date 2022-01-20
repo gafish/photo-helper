@@ -2,6 +2,7 @@ import BtnChooseDir from 'components/BtnChooseDir'
 
 import Total from './Total'
 import ToolBar from './ToolBar'
+import List from './List'
 
 export default () => {
   return (
@@ -11,6 +12,7 @@ export default () => {
         <Total />
       </div>
       <ToolBar />
+      <List />
     </div>
   )
 }

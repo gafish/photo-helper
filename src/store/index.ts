@@ -11,12 +11,12 @@ export class Store {
   }
 
   // 选中的目录
-  // selectedDir: string = ''
-  selectedDir: string = '1111'
+  selectedDir: string = ''
+  // selectedDir: string = '1111'
 
   // 文件列表
-  // fileList: any[] = []
-  fileList: any[] = [{}]
+  fileList: any[] = []
+  // fileList: any[] = [{ file_type: 'Image', basename: '1.jpg' }]
 
   // 合并值
   merge(obj: any) {

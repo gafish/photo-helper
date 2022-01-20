@@ -1,15 +1,17 @@
-import { useObserver } from 'mobx-react'
+import { FC } from 'react'
 import classnames from 'classnames'
 import { GoFileDirectory, GoFileMedia } from 'react-icons/go'
 
-import useStore from 'hooks/useStore'
+import inject from 'hoc/inject'
 
-export default () => {
-  const { fileList } = useStore()
+interface IProps {
+  fileList?: any[]
+}
 
+export const List: FC<IProps> = ({ fileList = [] }) => {
   const isEmpty = fileList.length === 0
 
-  return useObserver(() => (
+  return (
     <div className={classnames('mt-2 border', { 'min-h-[20rem]': isEmpty })}>
       <ul>
         {fileList.map((file: any) => (
@@ -30,5 +32,7 @@ export default () => {
         ))}
       </ul>
     </div>
-  ))
+  )
 }
+
+export default inject('fileList')(List)

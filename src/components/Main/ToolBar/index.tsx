@@ -1,18 +1,24 @@
-import { useObserver } from 'mobx-react'
+import { FC } from 'react'
 
-import useStore from 'hooks/useStore'
+import inject from 'hoc/inject'
 
-export default () => {
-  const { fileList } = useStore()
+import BtnCleanupPhoto from './BtnCleanupPhoto'
 
+interface IProps {
+  fileList?: any[]
+}
+
+export const ToolBar: FC<IProps> = ({ fileList = [] }) => {
   const isEmpty = fileList.length === 0
 
-  return useObserver(() =>
-    isEmpty ? null : (
-      <div className="mt-1 pt-1 border-t">
-        <button className="btn btn-outline btn-sm">一键整理照片</button>
-        <button className="btn btn-outline btn-sm btn-disabled ml-1">查找重复照片</button>
-      </div>
-    ),
+  return isEmpty ? null : (
+    <div className="mt-1 pt-1 border-t">
+      <BtnCleanupPhoto />
+      <button className="btn btn-outline btn-sm ml-1" disabled>
+        查找重复照片
+      </button>
+    </div>
   )
 }
+
+export default inject('fileList')(ToolBar)

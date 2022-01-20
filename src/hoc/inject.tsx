@@ -1,9 +1,12 @@
-import useStore from 'hooks/useStore'
+import { inject, observer } from 'mobx-react'
+
+import { Store } from 'store'
 
 export default (...args: string[]) => (Component: any) => {
-  return (props: any) => {
-    const store = useStore()
-    const stores = args.map(key => store[key])
-    return <Component {...props} {...stores} />
-  }
+  return inject<{ store: Store }, {}, {}, {}>(stores =>
+    args.reduce(
+      (prev, current) => ({ ...prev, [current]: stores.store[current] }),
+      {},
+    ),
+  )(observer(Component))
 }

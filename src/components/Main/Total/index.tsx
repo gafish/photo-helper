@@ -1,19 +1,21 @@
-import { useObserver } from 'mobx-react'
+import { FC } from 'react'
 
-import useStore from 'hooks/useStore'
+import inject from 'hoc/inject'
 
-export default () => {
-  const { fileList } = useStore()
+interface IProps {
+  fileList?: any[]
+}
 
+export const Total: FC<IProps> = ({ fileList = [] }) => {
   const isEmpty = fileList.length === 0
 
-  return useObserver(() =>
-    isEmpty ? null : (
-      <div className="text-sm">
-        当前目录总共
-        {fileList.filter((file: any) => file.file_type === 'Image').length}
-        张照片
-      </div>
-    ),
+  return isEmpty ? null : (
+    <div className="text-sm">
+      当前目录总共
+      {fileList.filter((file: any) => file.file_type === 'Image').length}
+      张照片
+    </div>
   )
 }
+
+export default inject('fileList')(Total)
