@@ -1,13 +1,15 @@
-import { useObserver } from 'mobx-react'
+import { FC } from 'react'
 
+import inject from 'hoc/inject'
 import Entry from 'components/Entry'
 import Main from 'components/Main'
-import useStore from 'hooks/useStore'
 
-export default () => {
-  const { selectedDir } = useStore()
-
-  return useObserver(() => (
-    <div className="h-full">{selectedDir ? <Main /> : <Entry />}</div>
-  ))
+interface IProps {
+  selectedDir?: string
 }
+
+export const App: FC<IProps> = ({ selectedDir = '' }) => {
+  return <div className="h-full">{selectedDir ? <Main /> : <Entry />}</div>
+}
+
+export default inject('selectedDir')(App)

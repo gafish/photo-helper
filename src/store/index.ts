@@ -19,7 +19,7 @@ export class Store {
   // fileList: any[] = [{ file_type: 'Image', basename: '1.jpg' }]
 
   // 合并值
-  merge(obj: any) {
+  merge = (obj: any) => {
     Object.keys(obj).forEach(key => {
       this[key] = obj[key]
     })
