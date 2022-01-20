@@ -45,7 +45,7 @@ module.exports = {
     // react
     'react/prop-types': 'off',
     'react/display-name': 'off',
-    'react/react-in-jsx-scope': 'warn',
+    'react/react-in-jsx-scope': 'off',
     // prettier
     'prettier/prettier': ['warn', prettierrc],
     // @typescript-eslint
