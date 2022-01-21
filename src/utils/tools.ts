@@ -2,6 +2,11 @@ import { fs } from '@tauri-apps/api'
 
 import * as invoke from 'utils/invoke'
 
+// 判断格式是否存在
+export const isExtensionExist = (extensions: any[], image: any) => {
+  return extensions.some(item => item.ext === getExt(image))
+}
+
 // 判断格式是否选中
 export const isChecked = (extensions: any[], item: any) =>
   extensions.reduce(
@@ -22,11 +27,16 @@ export const getExt = (item: any) => {
 export const isDir = (item: any) => item.is_dir
 
 // 过滤影像文件
-export const filterImages = (extensions: any[], includeDir = false) => (
-  images: any[],
-) => {
+export const filterImages = (
+  extensions: any[],
+  includeDir = false,
+  includeChecked = true,
+) => (images: any[]) => {
   return images?.filter(
-    (item: any) => isChecked(extensions, item) || (includeDir && isDir(item)),
+    (item: any) =>
+      (includeDir && isDir(item)) ||
+      (isExtensionExist(extensions, item) &&
+        (includeChecked ? isChecked(extensions, item) : true)),
   )
 }
 
@@ -48,7 +58,7 @@ export const getImageCreateDate = (item: any) => {
 }
 
 // 创建图片目录
-export const createImageDir = (item: any, selectedDir: string) => () => {
+export const createImageDir = (selectedDir: string) => (item: any) => {
   const date = getImageCreateDate(item)
   const dirPath = `${selectedDir}/${date}`
 

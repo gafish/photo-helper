@@ -20,6 +20,7 @@ export const List: FC<IProps> = ({ imageList = [], extensions = [] }) => {
           .filterImages(
             extensions,
             true,
+            true,
           )(imageList)
           .map((item: any) => (
             <li

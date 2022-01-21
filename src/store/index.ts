@@ -36,15 +36,15 @@ export class Store {
     })
   }
 
-  // 过滤影像文件
-  filterImages = (includeDir = false) =>
-    tools.filterImages(this.extensions, includeDir)
+  // 选择目录和影像文件
+  selectDirAndImages = (includeDir = true, includeChecked = false) =>
+    tools.filterImages(this.extensions, includeDir, includeChecked)
 
   // 读取目录
   readDir = (dir: string) => {
     invoke
       .readDir(dir)
-      .then(this.filterImages(true))
+      .then(this.selectDirAndImages())
       .then(this.sortImages)
       .then(this.saveImagesList)
   }
