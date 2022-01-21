@@ -21,6 +21,7 @@ export const isDir = (path: string): Promise<boolean> => {
 export const readDir = (dir: string): Promise<any> => {
   return new Promise(resolve => {
     invoke('read_directory', { dir }).then((result: any) => {
+      // console.log('result: ', result);
       resolve(result.files)
     })
   })
@@ -33,8 +34,8 @@ export const readDir = (dir: string): Promise<any> => {
  */
 export const getFilesInDirectory = (dir: string): Promise<any> => {
   return new Promise(resolve => {
-    invoke('get_files_in_directory', { dir }).then((files: any) => {
-      resolve(files)
+    invoke('get_files_in_directory', { dir }).then((images: any) => {
+      resolve(images)
     })
   })
 }

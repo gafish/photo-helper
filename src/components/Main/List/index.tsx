@@ -3,38 +3,46 @@ import classnames from 'classnames'
 import { GoFileDirectory, GoFileMedia } from 'react-icons/go'
 
 import inject from 'hoc/inject'
+import * as tools from 'utils/tools'
 
 interface IProps {
-  fileList?: any[]
+  imageList?: any[]
+  extensions?: any[]
 }
 
-export const List: FC<IProps> = ({ fileList = [] }) => {
-  const isEmpty = fileList.length === 0
+export const List: FC<IProps> = ({ imageList = [], extensions = [] }) => {
+  const isEmpty = imageList.length === 0
 
   return (
     <div className={classnames('mt-2 border', { 'min-h-[20rem]': isEmpty })}>
       <ul>
-        {fileList.map((file: any) => (
-          <li
-            key={file.basename}
-            className={classnames(
-              'border-b p-2 flex items-center last:border-0',
-              {
-                'font-bold': file.is_dir,
-              },
-            )}
-          >
-            <span className="mr-1">
-              {file.is_dir ? <GoFileDirectory /> : <GoFileMedia />}
-            </span>
-            {file.basename}
-          </li>
-        ))}
+        {tools
+          .filterImages(
+            extensions,
+            true,
+          )(imageList)
+          .map((item: any) => (
+            <li
+              key={item.basename}
+              className={classnames(
+                'border-b p-2 flex items-center last:border-0',
+                {
+                  'font-bold': item.is_dir,
+                },
+              )}
+            >
+              <span className="mr-1">
+                {item.is_dir ? <GoFileDirectory /> : <GoFileMedia />}
+              </span>
+              {item.basename}
+            </li>
+          ))}
       </ul>
     </div>
   )
 }
 
 export default inject(store => ({
-  fileList: store.fileList,
+  extensions: store.extensions,
+  imageList: store.imageList,
 }))(List)

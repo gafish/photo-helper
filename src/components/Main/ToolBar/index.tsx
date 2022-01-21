@@ -3,24 +3,28 @@ import { FC } from 'react'
 import inject from 'hoc/inject'
 
 import BtnCleanupPhoto from './BtnCleanupPhoto'
+import ExtFilter from './ExtFilter'
 
 interface IProps {
-  fileList?: any[]
+  imageList?: any[]
 }
 
-export const ToolBar: FC<IProps> = ({ fileList = [] }) => {
-  const isEmpty = fileList.length === 0
+export const ToolBar: FC<IProps> = ({ imageList = [] }) => {
+  const isEmpty = imageList.length === 0
 
   return isEmpty ? null : (
-    <div className="mt-1 pt-1 border-t">
-      <BtnCleanupPhoto />
-      <button className="btn btn-outline btn-sm ml-1" disabled>
-        查找重复照片
-      </button>
+    <div>
+      <div className="mt-1 pt-1 border-t">
+        <BtnCleanupPhoto />
+        <button className="btn btn-outline btn-sm ml-1" disabled>
+          查找重复
+        </button>
+      </div>
+      <ExtFilter />
     </div>
   )
 }
 
 export default inject(store => ({
-  fileList: store.fileList,
+  imageList: store.imageList,
 }))(ToolBar)

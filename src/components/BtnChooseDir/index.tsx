@@ -14,18 +14,13 @@ export const BtnChooseDir: FC<IProps> = ({
   onComplete = () => {},
   size = 'sm',
 }) => {
-  // 选择目录
-  const chooseDir = useCallback(() => {
-    return dialog
+  const readPhotoDir = useCallback(() => {
+    dialog
       .open({ directory: true })
       .then(dir => (Array.isArray(dir) ? dir[0] : dir))
-  }, [])
-
-  const readPhotoDir = useCallback(() => {
-    chooseDir()
       .then(onChooseDir)
       .then(onComplete)
-  }, [chooseDir, onComplete, onChooseDir])
+  }, [onComplete, onChooseDir])
 
   return (
     <button className={`btn btn-primary btn-${size}`} onClick={readPhotoDir}>
@@ -36,5 +31,5 @@ export const BtnChooseDir: FC<IProps> = ({
 
 export default inject(store => ({
   onChooseDir: store.saveSelectedDir,
-  onComplete: store.showDir,
+  onComplete: store.readDir,
 }))(BtnChooseDir)
