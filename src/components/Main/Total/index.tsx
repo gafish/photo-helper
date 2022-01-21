@@ -18,4 +18,6 @@ export const Total: FC<IProps> = ({ fileList = [] }) => {
   )
 }
 
-export default inject('fileList')(Total)
+export default inject(store => ({
+  fileList: store.fileList,
+}))(Total)

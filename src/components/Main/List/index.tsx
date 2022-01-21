@@ -35,4 +35,6 @@ export const List: FC<IProps> = ({ fileList = [] }) => {
   )
 }
 
-export default inject('fileList')(List)
+export default inject(store => ({
+  fileList: store.fileList,
+}))(List)

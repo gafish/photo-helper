@@ -4,14 +4,14 @@ import { dialog } from '@tauri-apps/api'
 import inject from 'hoc/inject'
 
 interface IProps {
-  merge?: (obj: any) => void
-  showDir?: (obj: any) => void
+  onChooseDir?: (obj: any) => void
+  onComplete?: (obj: any) => void
   size: 'sm' | 'lg'
 }
 
 export const BtnChooseDir: FC<IProps> = ({
-  merge = () => {},
-  showDir = () => {},
+  onChooseDir = () => {},
+  onComplete = () => {},
   size = 'sm',
 }) => {
   // 选择目录
@@ -20,20 +20,12 @@ export const BtnChooseDir: FC<IProps> = ({
       .open({ directory: true })
       .then(dir => (Array.isArray(dir) ? dir[0] : dir))
   }, [])
-  // 保存所选目录路径
-  const saveSelectedDir = useCallback(
-    (selectedDir: string) => {
-      merge({ selectedDir })
-      return selectedDir
-    },
-    [merge],
-  )
 
   const readPhotoDir = useCallback(() => {
     chooseDir()
-      .then(saveSelectedDir)
-      .then(showDir)
-  }, [chooseDir, showDir, saveSelectedDir])
+      .then(onChooseDir)
+      .then(onComplete)
+  }, [chooseDir, onComplete, onChooseDir])
 
   return (
     <button className={`btn btn-primary btn-${size}`} onClick={readPhotoDir}>
@@ -42,4 +34,7 @@ export const BtnChooseDir: FC<IProps> = ({
   )
 }
 
-export default inject('merge', 'showDir')(BtnChooseDir)
+export default inject(store => ({
+  onChooseDir: store.saveSelectedDir,
+  onComplete: store.showDir,
+}))(BtnChooseDir)

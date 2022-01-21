@@ -12,4 +12,6 @@ export const App: FC<IProps> = ({ selectedDir = '' }) => {
   return <div className="h-full">{selectedDir ? <Main /> : <Entry />}</div>
 }
 
-export default inject('selectedDir')(App)
+export default inject(store => ({
+  selectedDir: store.selectedDir,
+}))(App)

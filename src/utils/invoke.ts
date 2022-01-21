@@ -21,7 +21,6 @@ export const isDir = (path: string): Promise<boolean> => {
 export const readDir = (dir: string): Promise<any> => {
   return new Promise(resolve => {
     invoke('read_directory', { dir }).then((result: any) => {
-      console.log('result: ', result);
       resolve(result.files)
     })
   })

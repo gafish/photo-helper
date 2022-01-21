@@ -2,16 +2,16 @@ import { FC, useCallback } from 'react'
 import { fs } from '@tauri-apps/api'
 
 import inject from 'hoc/inject'
-import * as utils from 'utils'
+import * as invokes from 'utils/invoke'
 
 interface IProps {
-  showDir?: (obj: any) => void
+  onComplete?: (obj: any) => void
   fileList?: any[]
   selectedDir?: string
 }
 
 export const BtnCleanupPhoto: FC<IProps> = ({
-  showDir = () => {},
+  onComplete = () => {},
   fileList = [],
   selectedDir = '',
 }) => {
@@ -46,7 +46,7 @@ export const BtnCleanupPhoto: FC<IProps> = ({
       const date = getImageCreateDate(file)
       const dirPath = `${selectedDir}/${date}`
 
-      return utils.isDir(dirPath).then(result => {
+      return invokes.isDir(dirPath).then(result => {
         if (!result) fs.createDir(dirPath)
         return dirPath
       })
@@ -73,9 +73,9 @@ export const BtnCleanupPhoto: FC<IProps> = ({
     })
 
     Promise.all(tasks).then(() => {
-      showDir(selectedDir)
+      onComplete(selectedDir)
     })
-  }, [fileList, selectedDir, showDir, createImageDir, moveImage, checkImage])
+  }, [fileList, selectedDir, onComplete, createImageDir, moveImage, checkImage])
 
   return (
     <button className="btn btn-outline btn-sm" onClick={cleanupPhotos}>
@@ -84,4 +84,8 @@ export const BtnCleanupPhoto: FC<IProps> = ({
   )
 }
 
-export default inject('selectedDir', 'showDir', 'fileList')(BtnCleanupPhoto)
+export default inject(store => ({
+  selectedDir: store.selectedDir,
+  fileList: store.fileList,
+  onComplete: store.showDir,
+}))(BtnCleanupPhoto)

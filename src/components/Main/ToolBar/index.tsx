@@ -21,4 +21,6 @@ export const ToolBar: FC<IProps> = ({ fileList = [] }) => {
   )
 }
 
-export default inject('fileList')(ToolBar)
+export default inject(store => ({
+  fileList: store.fileList,
+}))(ToolBar)
