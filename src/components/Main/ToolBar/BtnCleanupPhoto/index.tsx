@@ -6,6 +6,7 @@ import * as tools from 'utils/tools'
 interface IProps {
   onComplete?: (obj: any) => void
   imageList?: any[]
+  repeatList?: any[]
   extensions?: any[]
   selectedDir?: string
 }
@@ -13,6 +14,7 @@ interface IProps {
 export const BtnCleanupPhoto: FC<IProps> = ({
   onComplete = () => {},
   imageList = [],
+  repeatList = [],
   extensions = [],
   selectedDir = '',
 }) => {
@@ -35,7 +37,11 @@ export const BtnCleanupPhoto: FC<IProps> = ({
   }, [imageList, selectedDir, onComplete, extensions])
 
   return (
-    <button className="btn btn-outline btn-sm" onClick={cleanupPhotos}>
+    <button
+      className="btn btn-outline btn-sm"
+      onClick={cleanupPhotos}
+      disabled={repeatList.length !== 0}
+    >
       一键整理
     </button>
   )
@@ -45,5 +51,6 @@ export default inject(store => ({
   selectedDir: store.selectedDir,
   extensions: store.extensions,
   imageList: store.imageList,
+  repeatList: store.repeatList,
   onComplete: store.readDir,
 }))(BtnCleanupPhoto)

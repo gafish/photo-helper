@@ -3,6 +3,8 @@ import { FC } from 'react'
 import inject from 'hoc/inject'
 
 import BtnCleanupPhoto from './BtnCleanupPhoto'
+import BtnFindRepeat from './BtnFindRepeat'
+import BtnClean from './BtnClean'
 import ExtFilter from './ExtFilter'
 
 interface IProps {
@@ -16,9 +18,8 @@ export const ToolBar: FC<IProps> = ({ imageList = [] }) => {
     <div>
       <div className="mt-1 pt-1 border-t">
         <BtnCleanupPhoto />
-        <button className="btn btn-outline btn-sm ml-1" disabled>
-          查找重复
-        </button>
+        <BtnFindRepeat />
+        <BtnClean />
       </div>
       <ExtFilter />
     </div>

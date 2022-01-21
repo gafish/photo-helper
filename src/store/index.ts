@@ -29,6 +29,9 @@ export class Store {
   // 文件列表
   imageList: any[] = []
 
+  // 重复文件列表
+  repeatList: any[] = []
+
   // 合并值
   merge = (obj: any) => {
     Object.keys(obj).forEach(key => {
@@ -54,6 +57,12 @@ export class Store {
     return tools.sortFiles(images)
   }
 
+  // 保存重复文件列表
+  saveRepeatList = (repeatList: any[]) => {
+    this.merge({ repeatList })
+    return repeatList
+  }
+
   // 保存影像文件列表
   saveImagesList = (imageList: any[]) => {
     this.merge({ imageList })
@@ -75,6 +84,11 @@ export class Store {
     this.merge({ extensions })
 
     return extensions
+  }
+
+  // 清空
+  cleanResult = () => {
+    this.merge({ imageList: [], repeatList: [], selectedDir: '' })
   }
 }
 

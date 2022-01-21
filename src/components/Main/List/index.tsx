@@ -1,49 +1,18 @@
 import { FC } from 'react'
-import classnames from 'classnames'
-import { GoFileDirectory, GoFileMedia } from 'react-icons/go'
 
 import inject from 'hoc/inject'
-import * as tools from 'utils/tools'
+
+import ImageList from './ImageList'
+import RepeatList from './RepeatList'
 
 interface IProps {
-  imageList?: any[]
-  extensions?: any[]
+  repeatList?: any[]
 }
 
-export const List: FC<IProps> = ({ imageList = [], extensions = [] }) => {
-  const isEmpty = imageList.length === 0
-
-  return (
-    <div className={classnames('mt-2 border', { 'min-h-[20rem]': isEmpty })}>
-      <ul>
-        {tools
-          .filterImages(
-            extensions,
-            true,
-            true,
-          )(imageList)
-          .map((item: any) => (
-            <li
-              key={item.basename}
-              className={classnames(
-                'border-b p-2 flex items-center last:border-0',
-                {
-                  'font-bold': item.is_dir,
-                },
-              )}
-            >
-              <span className="mr-1">
-                {item.is_dir ? <GoFileDirectory /> : <GoFileMedia />}
-              </span>
-              {item.basename}
-            </li>
-          ))}
-      </ul>
-    </div>
-  )
+export const List: FC<IProps> = ({ repeatList = [] }) => {
+  return repeatList.length !== 0 ? <RepeatList /> : <ImageList />
 }
 
 export default inject(store => ({
-  extensions: store.extensions,
-  imageList: store.imageList,
+  repeatList: store.repeatList,
 }))(List)
