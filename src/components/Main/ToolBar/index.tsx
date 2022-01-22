@@ -8,24 +8,24 @@ import BtnClean from './BtnClean'
 import ExtFilter from './ExtFilter'
 
 interface IProps {
-  imageList?: any[]
+  finding: boolean
+  repeatList?: any[]
 }
 
-export const ToolBar: FC<IProps> = ({ imageList = [] }) => {
-  const isEmpty = imageList.length === 0
-
-  return isEmpty ? null : (
+export const ToolBar: FC<IProps> = ({ finding = false, repeatList = [] }) => {
+  return (
     <div>
       <div className="mt-1 pt-1 border-t">
         <BtnCleanupPhoto />
         <BtnFindRepeat />
         <BtnClean />
       </div>
-      <ExtFilter />
+      {!(finding || repeatList.length > 0) && <ExtFilter />}
     </div>
   )
 }
 
 export default inject(store => ({
-  imageList: store.imageList,
+  finding: store.finding,
+  repeatList: store.repeatList,
 }))(ToolBar)

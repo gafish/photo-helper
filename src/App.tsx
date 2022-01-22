@@ -5,13 +5,22 @@ import Entry from 'components/Entry'
 import Main from 'components/Main'
 
 interface IProps {
-  selectedDir?: string
+  imageList?: any[]
+  loading?: boolean
 }
 
-export const App: FC<IProps> = ({ selectedDir = '' }) => {
-  return <div className="h-full">{selectedDir ? <Main /> : <Entry />}</div>
+export const App: FC<IProps> = ({ imageList = [], loading = false }) => {
+  if (loading)
+    return (
+      <div className="h-full flex items-center justify-center">
+        <button className="btn btn-sm btn-ghost loading">loading</button>
+      </div>
+    )
+
+  return <div className="h-full">{imageList.length ? <Main /> : <Entry />}</div>
 }
 
 export default inject(store => ({
-  selectedDir: store.selectedDir,
+  imageList: store.imageList,
+  loading: store.loading,
 }))(App)

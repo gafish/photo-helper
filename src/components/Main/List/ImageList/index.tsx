@@ -14,7 +14,11 @@ export const ImageList: FC<IProps> = ({ imageList = [], extensions = [] }) => {
   const isEmpty = imageList.length === 0
 
   return (
-    <div className={classnames('mt-2 border', { 'min-h-[20rem]': isEmpty })}>
+    <div
+      className={classnames('mt-2 border text-sm', {
+        'min-h-[20rem]': isEmpty,
+      })}
+    >
       <ul>
         {tools
           .filterImages(

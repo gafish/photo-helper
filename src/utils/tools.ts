@@ -58,12 +58,12 @@ export const getImageCreateDate = (item: any) => {
 }
 
 // 创建图片目录
-export const createImageDir = (selectedDir: string) => (item: any) => {
+export const createImageDir = (selectedDir: string, item: any) => {
   const date = getImageCreateDate(item)
   const dirPath = `${selectedDir}/${date}`
 
   return invoke.isDir(dirPath).then(result => {
-    if (!result) fs.createDir(dirPath)
+    if (!result) return fs.createDir(dirPath).then(() => dirPath)
     return dirPath
   })
 }
@@ -73,4 +73,12 @@ export const moveImage = (item: any) => (dirPath: string) => {
   return fs.copyFile(item.file_path, `${dirPath}/${item.basename}`).then(() => {
     fs.removeFile(item.file_path)
   })
+}
+
+// 串行promise≈
+export const serialPromise = (promises: any[]) => {
+  return promises.reduce(
+    (prev, current) => prev.then(current),
+    Promise.resolve(),
+  )
 }

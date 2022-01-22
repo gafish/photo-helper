@@ -8,7 +8,7 @@ interface IProps {
 
 export const BtnClean: FC<IProps> = ({ onClick = () => {} }) => {
   return (
-    <button className="btn btn-outline btn-sm ml-1" onClick={onClick}>
+    <button className="btn btn-ghost btn-xs ml-1" onClick={onClick}>
       清空结果
     </button>
   )

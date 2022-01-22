@@ -1,51 +1,30 @@
-import { FC, useCallback } from 'react'
-import { fs } from '@tauri-apps/api'
-import MD5 from 'md5'
+import { FC } from 'react'
+import classnames from 'classnames'
 
 import inject from 'hoc/inject'
-import * as tools from 'utils/tools'
 
 interface IProps {
-  onComplete?: (obj: any) => void
-  imageList?: any[]
+  loading: boolean
+  onClick?: () => void
 }
 
 export const BtnFindRepeat: FC<IProps> = ({
-  onComplete = () => {},
-  imageList = [],
+  loading = false,
+  onClick = () => {},
 }) => {
-  const findRepeat = useCallback(() => {
-    const temp: any = {}
-
-    Promise.all(
-      imageList.map((item: any) => {
-        return fs.readBinaryFile(item.file_path).then((data: any) => {
-          const hash = MD5(data)
-
-          if (temp[hash]) {
-            temp[hash].push(item)
-          } else {
-            temp[hash] = [item]
-          }
-        })
-      }),
-    ).finally(() => {
-      const repeatList = Object.entries<any>(temp)
-        .filter(([key, value]) => value.length > 1)
-        .map(([key, value]) => ({ hash: key, list: value }))
-
-      onComplete(repeatList)
-    })
-  }, [imageList, onComplete])
-
   return (
-    <button className="btn btn-outline btn-sm ml-1" onClick={findRepeat}>
-      查找重复
+    <button
+      className={classnames('btn btn-outline btn-sm ml-1', {
+        loading,
+      })}
+      onClick={onClick}
+    >
+      查找重复照片
     </button>
   )
 }
 
 export default inject(store => ({
-  imageList: store.imageList,
-  onComplete: store.saveRepeatList,
+  loading: store.finding,
+  onClick: store.findRepeat,
 }))(BtnFindRepeat)

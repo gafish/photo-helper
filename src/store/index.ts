@@ -1,4 +1,6 @@
 import { makeAutoObservable } from 'mobx'
+import { fs } from '@tauri-apps/api'
+import MD5 from 'md5'
 
 import * as invoke from 'utils/invoke'
 import * as tools from 'utils/tools'
@@ -32,6 +34,9 @@ export class Store {
   // 重复文件列表
   repeatList: any[] = []
 
+  loading = false
+  finding = false
+
   // 合并值
   merge = (obj: any) => {
     Object.keys(obj).forEach(key => {
@@ -45,11 +50,25 @@ export class Store {
 
   // 读取目录
   readDir = (dir: string) => {
+    if (!dir) return
+
+    this.setLoading(true)
     invoke
       .readDir(dir)
       .then(this.selectDirAndImages())
       .then(this.sortImages)
       .then(this.saveImagesList)
+      .finally(() => this.setLoading(false))
+  }
+
+  // finding
+  setFinding = (finding: boolean) => {
+    this.merge({ finding })
+  }
+
+  // loading
+  setLoading = (loading: boolean) => {
+    this.merge({ loading })
   }
 
   // 排序目录和影像文件
@@ -71,6 +90,8 @@ export class Store {
 
   // 保存所选目录路径
   saveSelectedDir = (selectedDir: string) => {
+    if (!selectedDir) return
+
     this.merge({ selectedDir })
     return selectedDir
   }
@@ -89,6 +110,52 @@ export class Store {
   // 清空
   cleanResult = () => {
     this.merge({ imageList: [], repeatList: [], selectedDir: '' })
+  }
+
+  // 查找重复文件
+  findRepeat = () => {
+    const temp: any = {}
+
+    this.setFinding(true)
+    Promise.all(
+      this.imageList
+        .filter(item => item.file_type === 'Image')
+        .map((item: any) =>
+          fs.readBinaryFile(item.file_path).then((data: any) => {
+            const hash = MD5(data)
+
+            if (temp[hash]) {
+              temp[hash].push(item)
+            } else {
+              temp[hash] = [item]
+            }
+          }),
+        ),
+    ).finally(() => {
+      const repeatList = Object.entries<any>(temp)
+        .filter(([, value]) => value.length > 1)
+        .map(([hash, list]) => ({ hash, list }))
+
+      this.merge({ repeatList })
+      this.setFinding(false)
+    })
+  }
+
+  // 整理照片
+  cleanupPhotos = () => {
+    const images = tools.filterImages(
+      this.extensions,
+      false,
+      true,
+    )(this.imageList)
+    const tasks = images.map((item: any) => {
+      return () =>
+        tools.createImageDir(this.selectedDir, item).then(tools.moveImage(item))
+    })
+
+    tasks.push(() => Promise.resolve(this.readDir(this.selectedDir)))
+
+    tools.serialPromise(tasks)
   }
 }
 
