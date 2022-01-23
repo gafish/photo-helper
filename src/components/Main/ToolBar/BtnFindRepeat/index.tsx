@@ -5,11 +5,13 @@ import inject from 'hoc/inject'
 
 interface IProps {
   loading: boolean
+  disabled: boolean
   onClick?: () => void
 }
 
 export const BtnFindRepeat: FC<IProps> = ({
   loading = false,
+  disabled = false,
   onClick = () => {},
 }) => {
   return (
@@ -18,6 +20,7 @@ export const BtnFindRepeat: FC<IProps> = ({
         loading,
       })}
       onClick={onClick}
+      disabled={disabled}
     >
       查找重复照片
     </button>
@@ -26,5 +29,6 @@ export const BtnFindRepeat: FC<IProps> = ({
 
 export default inject(store => ({
   loading: store.finding,
+  disabled: store.disabled,
   onClick: store.findRepeat,
 }))(BtnFindRepeat)

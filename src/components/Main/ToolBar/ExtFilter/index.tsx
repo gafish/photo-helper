@@ -5,11 +5,13 @@ import inject from 'hoc/inject'
 interface IProps {
   extensions?: any[]
   onExtChange?: (ext: string, checked: boolean) => void
+  disabled?: boolean
 }
 
 export const ExtFilter: FC<IProps> = ({
   extensions = [],
   onExtChange = () => {},
+  disabled = false,
 }) => {
   const handleExtChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -32,6 +34,7 @@ export const ExtFilter: FC<IProps> = ({
             className="checkbox checkbox-xs"
             value={item.ext}
             onChange={handleExtChange}
+            disabled={disabled}
           />
         </label>
       ))}
@@ -40,6 +43,7 @@ export const ExtFilter: FC<IProps> = ({
 }
 
 export default inject(store => ({
+  disabled: store.disabled,
   extensions: store.extensions,
   onExtChange: store.updateExtensions,
 }))(ExtFilter)

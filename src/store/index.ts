@@ -34,8 +34,19 @@ export class Store {
   // 重复文件列表
   repeatList: any[] = []
 
+  // 目录加载中
   loading = false
+
+  // 重复文件查找中
   finding = false
+
+  // 文件整理中
+  processing = false
+
+  // 禁用状态
+  get disabled() {
+    return this.loading || this.finding || this.processing
+  }
 
   // 合并值
   merge = (obj: any) => {
@@ -52,13 +63,11 @@ export class Store {
   readDir = (dir: string) => {
     if (!dir) return
 
-    this.setLoading(true)
     return invoke
       .readDir(dir)
       .then(this.selectDirAndImages())
       .then(this.sortImages)
       .then(this.saveImagesList)
-      .finally(() => this.setLoading(false))
   }
 
   // finding
@@ -86,14 +95,6 @@ export class Store {
   saveImagesList = (imageList: any[]) => {
     this.merge({ imageList })
     return imageList
-  }
-
-  // 保存所选目录路径
-  saveSelectedDir = (selectedDir: string) => {
-    if (!selectedDir) return ''
-
-    this.merge({ selectedDir })
-    return selectedDir
   }
 
   // 更新文件格式选中状态
@@ -148,23 +149,41 @@ export class Store {
       false,
       true,
     )(this.imageList)
-    const tasks: any = images.map((item: any) => {
-      return () =>
-        tools.createImageDir(this.selectedDir, item).then(tools.moveImage(item))
-    })
-
-    tasks.push(() => Promise.resolve(this.selectedDir).then(this.readDir))
+    const tasks: any = [
+      () => Promise.resolve(this.merge({ processing: true })),
+      ...images.map((item: any) => {
+        return () =>
+          tools
+            .createImageDir(this.selectedDir, item)
+            .then(tools.moveImage(item))
+      }),
+      () => Promise.resolve(this.selectedDir).then(this.readDir),
+      () => Promise.resolve(this.merge({ processing: false })),
+    ]
 
     tools.serialPromise(tasks)
   }
 
   // 选择照片目录
   chooseDir = () => {
+    // 保存所选目录路径
+    const saveSelectedDir = (selectedDir: string) => {
+      this.merge({ selectedDir })
+      return selectedDir
+    }
+    const saveLoading = (loading: boolean) => (selectedDir: string) => {
+      this.merge({ loading })
+
+      return selectedDir
+    }
+
     dialog
       .open({ directory: true })
       .then(dir => (Array.isArray(dir) ? dir[0] : dir))
-      .then(this.saveSelectedDir)
+      .then(saveLoading(true))
+      .then(saveSelectedDir)
       .then(this.readDir)
+      .finally(() => this.setLoading(false))
   }
 }
 
