@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx'
-import { fs } from '@tauri-apps/api'
+import { fs, dialog } from '@tauri-apps/api'
 import MD5 from 'md5'
 
 import * as invoke from 'utils/invoke'
@@ -53,7 +53,7 @@ export class Store {
     if (!dir) return
 
     this.setLoading(true)
-    invoke
+    return invoke
       .readDir(dir)
       .then(this.selectDirAndImages())
       .then(this.sortImages)
@@ -90,7 +90,7 @@ export class Store {
 
   // 保存所选目录路径
   saveSelectedDir = (selectedDir: string) => {
-    if (!selectedDir) return
+    if (!selectedDir) return ''
 
     this.merge({ selectedDir })
     return selectedDir
@@ -148,14 +148,23 @@ export class Store {
       false,
       true,
     )(this.imageList)
-    const tasks = images.map((item: any) => {
+    const tasks: any = images.map((item: any) => {
       return () =>
         tools.createImageDir(this.selectedDir, item).then(tools.moveImage(item))
     })
 
-    tasks.push(() => Promise.resolve(this.readDir(this.selectedDir)))
+    tasks.push(() => Promise.resolve(this.selectedDir).then(this.readDir))
 
     tools.serialPromise(tasks)
+  }
+
+  // 选择照片目录
+  chooseDir = () => {
+    dialog
+      .open({ directory: true })
+      .then(dir => (Array.isArray(dir) ? dir[0] : dir))
+      .then(this.saveSelectedDir)
+      .then(this.readDir)
   }
 }
 

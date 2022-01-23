@@ -12,8 +12,10 @@ export const Total: FC<IProps> = ({ imageList = [] }) => {
   return isEmpty ? null : (
     <div className="text-sm">
       当前目录总共
-      {imageList.filter((item: any) => item.file_type === 'Image').length}
-      张照片
+      <span className="text-green-600">
+        {imageList.filter((item: any) => item.file_type === 'Image').length}
+      </span>
+      个影像文件
     </div>
   )
 }
