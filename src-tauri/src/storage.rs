@@ -9,22 +9,22 @@ pub struct StorageData {
   pub status: bool,
 }
 
-#[tauri::command]
-pub fn write_data(key: String, value: serde_json::Value) -> bool {
-  let storage_dir = Path::new(&local_data_dir().unwrap()).join("Xplorer");
-  let mut result = match fs::create_dir_all(storage_dir.clone()) {
-    Ok(..) => true,
-    Err(..) => false,
-  };
-  let value = serde_json::to_vec(&value).unwrap();
-  let value = bincode::serialize(&value).unwrap();
-  // let value = serde_json::to_string(&value).unwrap();
-  result = match fs::write(storage_dir.join(key), value) {
-    Ok(..) => true && result,
-    Err(..) => false,
-  };
-  result
-}
+// #[tauri::command]
+// pub fn write_data(key: String, value: serde_json::Value) -> bool {
+//   let storage_dir = Path::new(&local_data_dir().unwrap()).join("Xplorer");
+//   let mut result = match fs::create_dir_all(storage_dir.clone()) {
+//     Ok(..) => true,
+//     Err(..) => false,
+//   };
+//   let value = serde_json::to_vec(&value).unwrap();
+//   let value = bincode::serialize(&value).unwrap();
+//   // let value = serde_json::to_string(&value).unwrap();
+//   result = match fs::write(storage_dir.join(key), value) {
+//     Ok(..) => true && result,
+//     Err(..) => false,
+//   };
+//   result
+// }
 
 #[tauri::command]
 pub fn read_data(key: String) -> Result<StorageData, String> {
@@ -52,12 +52,12 @@ pub fn read_data(key: String) -> Result<StorageData, String> {
   Ok(StorageData { data, status })
 }
 
-#[tauri::command]
-pub fn delete_storage_data(key: String) {
-  let storage_dir = Path::new(&local_data_dir().unwrap()).join("Xplorer");
+// #[tauri::command]
+// pub fn delete_storage_data(key: String) {
+//   let storage_dir = Path::new(&local_data_dir().unwrap()).join("Xplorer");
 
-  match fs::remove_file(storage_dir.join(key)) {
-    Ok(..) => {}
-    Err(..) => {}
-  }
-}
+//   match fs::remove_file(storage_dir.join(key)) {
+//     Ok(..) => {}
+//     Err(..) => {}
+//   }
+// }

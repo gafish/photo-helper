@@ -19,7 +19,7 @@ use std::os::windows::prelude::*;
 #[cfg(target_os = "windows")]
 use std::os::windows::process::CommandExt;
 use std::sync::mpsc::channel;
-use tauri::api::dialog::ask;
+// use tauri::api::dialog::ask;
 #[cfg(target_os = "windows")]
 use tauri::api::path::local_data_dir;
 
