@@ -5,7 +5,7 @@ description = "照片整理大师"
 authors = ["gafish"]
 license = ""
 repository = ""
-default-run = "app"
+default-run = "photo-cleanup"
 edition = "2018"
 build = "src/build.rs"
 
