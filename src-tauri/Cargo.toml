@@ -1,8 +1,8 @@
 [package]
-name = "app"
-version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
+name = "photo-cleanup"
+version = "0.0.1"
+description = "照片整理大师"
+authors = ["gafish"]
 license = ""
 repository = ""
 default-run = "app"
