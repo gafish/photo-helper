@@ -3,6 +3,7 @@ import { FC } from 'react'
 import inject from 'hoc/inject'
 import Entry from 'components/Entry'
 import Main from 'components/Main'
+import Verion from 'components/Version'
 
 interface IProps {
   imageList?: any[]
@@ -17,7 +18,12 @@ export const App: FC<IProps> = ({ imageList = [], loading = false }) => {
       </div>
     )
 
-  return <div className="h-full">{imageList.length ? <Main /> : <Entry />}</div>
+  return (
+    <div className="h-full">
+      {imageList.length ? <Main /> : <Entry />}
+      <Verion />
+    </div>
+  )
 }
 
 export default inject(store => ({
