@@ -27,6 +27,6 @@ export const BtnCleanupPhoto: FC<IProps> = ({
 
 export default inject(store => ({
   loading: store.processing,
-  disabled: store.repeatList.length > 0 || store.disabled,
+  disabled: store.disabled,
   onClick: store.cleanupPhotos,
 }))(BtnCleanupPhoto)

@@ -14,8 +14,8 @@ interface IProps {
 
 export const ToolBar: FC<IProps> = ({ finding = false, repeatList = [] }) => {
   return (
-    <div>
-      <div className="mt-1 pt-1 border-t">
+    <div className="py-3">
+      <div className="mt-1">
         <BtnCleanupPhoto />
         <BtnFindRepeat />
         <BtnClean />

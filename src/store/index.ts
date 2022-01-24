@@ -28,6 +28,9 @@ export class Store {
   // 选中的目录
   selectedDir = ''
 
+  // 激活的tab
+  activeTab = 'all'
+
   // 文件列表
   imageList: any[] = []
 
@@ -113,33 +116,41 @@ export class Store {
     this.merge({ imageList: [], repeatList: [], selectedDir: '' })
   }
 
-  // 查找重复文件
+  // 查找重复照片
   findRepeat = () => {
     const temp: any = {}
-
-    this.setFinding(true)
-    Promise.all(
-      this.imageList
-        .filter(item => item.file_type === 'Image')
-        .map((item: any) =>
-          fs.readBinaryFile(item.file_path).then((data: any) => {
-            const hash = MD5(data)
-
-            if (temp[hash]) {
-              temp[hash].push(item)
-            } else {
-              temp[hash] = [item]
-            }
-          }),
-        ),
-    ).finally(() => {
+    const saveRepeatList = () => {
       const repeatList = Object.entries<any>(temp)
         .filter(([, value]) => value.length > 1)
         .map(([hash, list]) => ({ hash, list }))
-
       this.merge({ repeatList })
-      this.setFinding(false)
-    })
+    }
+    const saveActiveTab = () => {
+      this.merge({ activeTab: 'repeat' })
+    }
+
+    this.setFinding(true)
+
+    const tasks: any[] = this.imageList
+      .filter(item => item.file_type === 'Image')
+      .map((item: any) =>
+        fs.readBinaryFile(item.file_path).then((data: any) => {
+          const hash = MD5(data)
+
+          if (temp[hash]) {
+            temp[hash].push(item)
+          } else {
+            temp[hash] = [item]
+          }
+        }),
+      )
+
+    Promise.all(tasks)
+      .then(saveRepeatList)
+      .then(saveActiveTab)
+      .finally(() => {
+        this.setFinding(false)
+      })
   }
 
   // 整理照片
@@ -158,6 +169,7 @@ export class Store {
             .then(tools.moveImage(item))
       }),
       () => Promise.resolve(this.selectedDir).then(this.readDir),
+      () => Promise.resolve('all').then(this.changeTab),
       () => Promise.resolve(this.merge({ processing: false })),
     ]
 
@@ -184,6 +196,11 @@ export class Store {
       .then(saveSelectedDir)
       .then(this.readDir)
       .finally(() => this.setLoading(false))
+  }
+
+  // 切换 tab
+  changeTab = (activeTab: string) => {
+    this.merge({ activeTab })
   }
 }
 
