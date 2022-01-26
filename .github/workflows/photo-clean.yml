@@ -70,7 +70,7 @@ jobs:
         include:
           - platform: ubuntu-latest
             buildFolder: bundle/deb
-            ext: \_${{ env.PACKAGE_VERSION }}_amd64.deb
+            ext: ".deb"
             compressed: ''
           - platform: macos-latest
             buildFolder: bundle/dmg
