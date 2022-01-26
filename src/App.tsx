@@ -3,7 +3,8 @@ import { FC } from 'react'
 import inject from 'hoc/inject'
 import Entry from 'components/Entry'
 import Main from 'components/Main'
-import Verion from 'components/Version'
+import Version from 'components/Version'
+import Loading from 'components/Loading'
 
 interface IProps {
   imageList?: any[]
@@ -11,17 +12,12 @@ interface IProps {
 }
 
 export const App: FC<IProps> = ({ imageList = [], loading = false }) => {
-  if (loading)
-    return (
-      <div className="h-full flex items-center justify-center">
-        <button className="btn btn-sm btn-ghost loading">loading</button>
-      </div>
-    )
+  if (loading) return <Loading />
 
   return (
     <div className="h-full">
       {imageList.length ? <Main /> : <Entry />}
-      <Verion />
+      <Version />
     </div>
   )
 }

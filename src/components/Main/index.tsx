@@ -2,7 +2,7 @@ import ToolBar from './ToolBar'
 import Head from './Head'
 import List from './List'
 
-export default () => {
+const Main = () => {
   return (
     <div className="container mx-auto py-2">
       <Head />
@@ -11,3 +11,5 @@ export default () => {
     </div>
   )
 }
+
+export default Main
