@@ -78,11 +78,6 @@ export class Store {
     this.merge({ finding })
   }
 
-  // loading
-  setLoading = (loading: boolean) => {
-    this.merge({ loading })
-  }
-
   // 排序目录和影像文件
   sortImages = (images: any[]) => {
     return tools.sortFiles(images)
@@ -113,7 +108,12 @@ export class Store {
 
   // 清空
   cleanResult = () => {
-    this.merge({ imageList: [], repeatList: [], selectedDir: '' })
+    this.merge({
+      imageList: [],
+      repeatList: [],
+      selectedDir: '',
+      activeTab: 'all',
+    })
   }
 
   // 查找重复照片
@@ -178,24 +178,26 @@ export class Store {
 
   // 选择照片目录
   chooseDir = () => {
+    // 选择目录名
+    const selectDir = (selectedDir: any[] | string) =>
+      Array.isArray(selectedDir) ? selectedDir[0] : selectedDir
     // 保存所选目录路径
     const saveSelectedDir = (selectedDir: string) => {
       this.merge({ selectedDir })
       return selectedDir
     }
-    const saveLoading = (loading: boolean) => (selectedDir: string) => {
+    const saveLoading = (loading: boolean) => (selectedDir = '') => {
       this.merge({ loading })
-
       return selectedDir
     }
 
     dialog
       .open({ directory: true })
-      .then(dir => (Array.isArray(dir) ? dir[0] : dir))
+      .then(selectDir)
       .then(saveLoading(true))
       .then(saveSelectedDir)
       .then(this.readDir)
-      .finally(() => this.setLoading(false))
+      .finally(saveLoading(false))
   }
 
   // 切换 tab
