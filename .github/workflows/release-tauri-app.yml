@@ -1,32 +1,15 @@
-name: release-tauri-app
 
+name: release-tauri-app
 on:
   push:
     branches:
       - main
     paths:
       - '**/package.json'
-
 jobs:
-  check-windows:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: setup node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 16
-      - name: get version and set env
-        run: |
-          dir
-          $env:PACKAGE_VERSION=$(node -p "require('.\\package.json').version")
-          echo %PACKAGE_VERSION%
-          dir
   check-build:
-    needs: check-windows
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-
+    timeout-minutes: 300
     steps:
       - uses: actions/checkout@v2
       - name: setup node
@@ -47,14 +30,12 @@ jobs:
         run: yarn build
       - run: cargo install tauri-bundler --force
       - name: build tauri app
-        run: npm run tauri:build
-
+        run: yarn tauri:build
   create-release:
     needs: check-build
     runs-on: ubuntu-latest
     outputs:
       RELEASE_UPLOAD_URL: ${{ steps.create_tauri_release.outputs.upload_url }}
-
     steps:
       - uses: actions/checkout@v2
       - name: setup node
@@ -69,17 +50,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ env.PACKAGE_VERSION }}
-          release_name: "Release photoClean app v${{ env.PACKAGE_VERSION }}"
-          body: "See the assets to download this version and install."
+          tag_name: ${{ matrix.package.name }}-v${{ env.PACKAGE_VERSION }}
+          release_name: 'Release photoClean app v${{ env.PACKAGE_VERSION }}'
+          body: 'See the assets to download this version and install.'
           draft: true
           prerelease: false
-
   create-and-upload-assets:
     needs: create-release
     runs-on: ${{ matrix.platform }}
-    timeout-minutes: 30
-
+    timeout-minutes: 300
     strategy:
       fail-fast: false
       matrix:
@@ -87,17 +66,16 @@ jobs:
         include:
           - platform: ubuntu-latest
             buildFolder: bundle/deb
-            ext: "_amd64.deb"
+            ext: \_0.1.0_amd64.deb
             compressed: ''
           - platform: macos-latest
-            buildFolder: bundle/dmg
-            ext: ".dmg"
-            compressed: ''
+            buildFolder: bundle/osx
+            ext: .app
+            compressed: .tgz
           - platform: windows-latest
             buildFolder: ''
-            ext: ".x64.msi"
+            ext: .x64.msi
             compressed: ''
-
     steps:
       - uses: actions/checkout@v2
       - name: setup node
@@ -114,32 +92,16 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y webkit2gtk-4.0
-      - run: cargo install tauri-bundler --force
       - run: yarn
       - name: build photoClean for tauri app
         run: yarn build
+      - run: cargo install tauri-bundler --force
       - name: build tauri app
-        run: |
-          cd src-tauri && cargo update && cd ../
-          npm run tauri:build
-      - name: get version
-        run: echo ::set-env name=PACKAGE_VERSION::$(node -p "require('./package.json').version")
-      - name: add version info for osx files
+        run: yarn tauri:build
+      - name: compress (macos only)
         if: matrix.platform == 'macos-latest'
         working-directory: ${{ format('./src-tauri/target/release/{0}', matrix.buildFolder ) }}
-        run: |
-          mv photoClean.dmg LuckyYou_${{ env.PACKAGE_VERSION }}.dmg
-      - name: add version info for msi files
-        if: matrix.platform == 'windows-latest'
-        run: |
-          dir
-          $env:PACKAGE_VERSION=$(node -p "require('.\\package.json').version")
-      - name: add version info for msi files
-        if: matrix.platform == 'windows-latest'
-        working-directory: ${{ format('./src-tauri/target/release/{0}', matrix.buildFolder ) }}
-        run: |
-          ren photoClean.x64.msi LuckyYou_${{ env.PACKAGE_VERSION }}.x64.msi
-          # mv photoClean.x64.msi LuckyYou_${{ env.PACKAGE_VERSION }}.x64.msi
+        run: tar -czf ${{ format('photoClean{0}{1}', matrix.ext, matrix.compressed ) }} ${{ format('photoClean{0}', matrix.ext ) }}
       - name: upload release asset
         id: upload-release-asset
         uses: actions/upload-release-asset@v1.0.2
@@ -147,6 +109,22 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create-release.outputs.RELEASE_UPLOAD_URL }}
-          asset_path: ${{ format('./src-tauri/target/release/{0}/LuckyYou_{1}{2}{3}', matrix.buildFolder, env.PACKAGE_VERSION, matrix.ext, matrix.compressed ) }}
-          asset_name: ${{ format('LuckyYou_{0}{1}{2}', env.PACKAGE_VERSION, matrix.ext, matrix.compressed ) }}
+          asset_path: ${{ format('./src-tauri/target/release/{0}/photoClean{1}{2}', matrix.buildFolder, matrix.ext, matrix.compressed ) }}
+          asset_name: ${{ format('photoClean{0}{1}', matrix.ext, matrix.compressed ) }}
+          asset_content_type: application/zip
+      - name: build tauri app in debug mode
+        run: yarn tauri:build --debug
+      - name: compress (macos only)
+        if: matrix.platform == 'macos-latest'
+        working-directory: ${{ format('./src-tauri/target/debug/{0}', matrix.buildFolder ) }}
+        run: tar -czf ${{ format('photoClean{0}{1}', matrix.ext, matrix.compressed ) }} ${{ format('photoClean{0}', matrix.ext ) }}
+      - name: upload release asset with debug mode on
+        id: upload-release-asset-debug-mode
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.RELEASE_UPLOAD_URL }}
+          asset_path: ${{ format('./src-tauri/target/debug/{0}/photoClean{1}{2}', matrix.buildFolder, matrix.ext, matrix.compressed ) }}
+          asset_name: ${{ format('photoClean-debug{0}{1}', matrix.ext, matrix.compressed ) }}
           asset_content_type: application/zip
