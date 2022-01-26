@@ -2,8 +2,7 @@
 name: release-photo-clean
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
     paths:
       - '**/package.json'
 jobs:
