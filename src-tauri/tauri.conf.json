@@ -1,6 +1,6 @@
 {
   "package": {
-    "productName": "photo-cleanup",
+    "productName": "PhotoCleanup",
     "version": "0.0.1-alpha.1"
   },
   "build": {
@@ -8,13 +8,13 @@
     "devPath": "http://localhost:3000",
     "beforeDevCommand": "",
     "beforeBuildCommand": "",
-    "withGlobalTauri": true
+    "withGlobalTauri": false
   },
   "tauri": {
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "com.photoCleanup",
+      "identifier": "com.gafish.photoCleanup",
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
@@ -25,8 +25,8 @@
       "resources": [],
       "externalBin": [],
       "copyright": "",
-      "category": "DeveloperTool",
-      "shortDescription": "",
+      "category": "Utility",
+      "shortDescription": "a tool to clean up photos",
       "longDescription": "",
       "deb": {
         "depends": [],
@@ -34,7 +34,7 @@
       },
       "macOS": {
         "frameworks": [],
-        "minimumSystemVersion": "",
+        "minimumSystemVersion": "11",
         "useBootstrapper": false,
         "exceptionDomain": "",
         "signingIdentity": null,
@@ -58,7 +58,9 @@
         "width": 800,
         "height": 600,
         "resizable": true,
-        "fullscreen": false
+        "fullscreen": false,
+        "decorations": true,
+        "skipTaskbar": true
       }
     ],
     "security": {
