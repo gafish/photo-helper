@@ -1,5 +1,5 @@
 
-name: release-tauri-app
+name: release-photo-clean
 on:
   push:
     branches:
