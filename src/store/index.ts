@@ -4,6 +4,7 @@ import MD5 from 'md5'
 
 import * as invoke from 'utils/invoke'
 import * as tools from 'utils/tools'
+import Alert from 'components/Alert'
 
 export class Store {
   // eslint-disable-next-line no-undef
@@ -92,6 +93,8 @@ export class Store {
   // 保存影像文件列表
   saveImagesList = (imageList: any[]) => {
     this.merge({ imageList })
+
+    if (imageList.length === 0) Alert.show('没有发现有效的影像文件')
     return imageList
   }
 

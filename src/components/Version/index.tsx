@@ -10,7 +10,7 @@ export const Version = () => {
 
   return (
     <a
-      className="fixed left-1 bottom-1 text-gray-300 text-xs"
+      className="fixed right-1 bottom-1 text-gray-300 text-xs bg-white px-2 py-1 rounded-full"
       href="https://github.com/gafish/photo-cleanup-app/releases"
       target="_blank"
       rel="noreferrer"
