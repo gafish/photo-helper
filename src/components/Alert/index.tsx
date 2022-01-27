@@ -2,7 +2,7 @@ import ReactDOM from 'react-dom'
 
 const Alert = ({ text = '' }) => {
   return (
-    <div className="w-full p-1 fixed left-0 top-0">
+    <div className="w-full p-1 fixed left-0 top-0 z-auto">
       <div className="alert alert-warning">
         <div className="flex-1">
           <svg

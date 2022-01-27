@@ -75,11 +75,6 @@ export class Store {
       .then(this.saveImagesList)
   }
 
-  // finding
-  setFinding = (finding: boolean) => {
-    this.merge({ finding })
-  }
-
   // 排序目录和影像文件
   sortImages = (images: any[]) => {
     return tools.sortFiles(images)
@@ -128,33 +123,39 @@ export class Store {
         .filter(([, value]) => value.length > 1)
         .map(([hash, list]) => ({ hash, list }))
       this.merge({ repeatList })
+      return repeatList
     }
-    const saveActiveTab = () => {
+    const saveActiveTab = (repeatList: any[]) => {
+      if (repeatList.length === 0) return Alert.show('没有发现重复的照片')
       this.merge({ activeTab: 'repeat' })
     }
+    const saveFinding = (finding: boolean) => () => {
+      this.merge({ finding })
+    }
+    const filterFile = () =>
+      this.imageList.filter(item => item.file_type === 'Image')
+    const readFile = (files: any[]) =>
+      Promise.all(
+        files.map((item: any) =>
+          fs.readBinaryFile(item.file_path).then((data: any) => {
+            const hash = MD5(data)
 
-    this.setFinding(true)
-
-    const tasks: any[] = this.imageList
-      .filter(item => item.file_type === 'Image')
-      .map((item: any) =>
-        fs.readBinaryFile(item.file_path).then((data: any) => {
-          const hash = MD5(data)
-
-          if (temp[hash]) {
-            temp[hash].push(item)
-          } else {
-            temp[hash] = [item]
-          }
-        }),
+            if (temp[hash]) {
+              temp[hash].push(item)
+            } else {
+              temp[hash] = [item]
+            }
+          }),
+        ),
       )
 
-    Promise.all(tasks)
+    Promise.resolve()
+      .then(saveFinding(true))
+      .then(filterFile)
+      .then(readFile)
       .then(saveRepeatList)
       .then(saveActiveTab)
-      .finally(() => {
-        this.setFinding(false)
-      })
+      .finally(saveFinding(false))
   }
 
   // 整理照片

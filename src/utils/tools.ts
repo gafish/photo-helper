@@ -49,9 +49,9 @@ export const sortFiles = (images: any[]) =>
 // 月份补零
 export const addZero = (num: number, n = 10) => (num < n ? `0${num}` : num)
 
-// 获取图片生成日期
-export const getImageCreateDate = (item: any) => {
-  const date = new Date(item.created.secs_since_epoch * 1000)
+// 获取图片日期
+export const getImageDate = (item: any) => {
+  const date = new Date(item.last_modified.secs_since_epoch * 1000)
   return `${date.getFullYear()}-${addZero(date.getMonth() + 1)}-${addZero(
     date.getDate(),
   )}`
@@ -59,7 +59,7 @@ export const getImageCreateDate = (item: any) => {
 
 // 创建图片目录
 export const createImageDir = (selectedDir: string, item: any) => {
-  const date = getImageCreateDate(item)
+  const date = getImageDate(item)
   const dirPath = `${selectedDir}/${date}`
 
   return invoke.isDir(dirPath).then(result => {

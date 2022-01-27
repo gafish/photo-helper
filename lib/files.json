@@ -85,7 +85,7 @@
 		"thumbnail": "extension/txt.svg"
 	},
 	{
-		"extensions": ["jpg", "png", "gif", "bmp", "jpeg", "jpe", "jif", "jfif", "jfi", "webp", "tiff", "tif", "ico", "svg", "webp"],
+		"extensions": ["jpg", "png", "gif", "bmp", "jpeg", "jpe", "jif", "jfif", "jfi", "webp", "tiff", "tif", "ico", "svg", "webp", "heic"],
 		"type": "Image",
 		"thumbnail": "extension/image.svg"
 	},
