@@ -22,6 +22,7 @@ export class Store {
     { ext: 'gif', checked: true },
     { ext: 'bmp', checked: true },
     { ext: 'webp', checked: true },
+    { ext: 'heic', checked: true },
     { ext: 'mov', checked: true },
     { ext: 'mp4', checked: true },
   ]
