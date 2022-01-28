@@ -26,7 +26,13 @@ export const getExt = (item: any) => {
 // 判断是否是目录
 export const isDir = (item: any) => item.is_dir
 
-// 过滤影像文件
+/**
+ * 过滤影像文件
+ * @param extensions 过滤格式列表
+ * @param includeDir 是否包含目录
+ * @param includeChecked 是否包含选中格式
+ * @returns 文件列表
+ */
 export const filterImages = (
   extensions: any[],
   includeDir = false,

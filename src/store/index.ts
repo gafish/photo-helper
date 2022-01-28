@@ -160,47 +160,58 @@ export class Store {
 
   // 整理照片
   cleanupPhotos = () => {
-    const images = tools.filterImages(
-      this.extensions,
-      false,
-      true,
-    )(this.imageList)
-    const tasks: any = [
-      () => Promise.resolve(this.merge({ processing: true })),
-      ...images.map((item: any) => {
-        return () =>
-          tools
-            .createImageDir(this.selectedDir, item)
-            .then(tools.moveImage(item))
-      }),
-      () => Promise.resolve(this.selectedDir).then(this.readDir),
-      () => Promise.resolve('all').then(this.changeTab),
-      () => Promise.resolve(this.merge({ processing: false })),
-    ]
+    const saveProcessing = (processing: boolean) => () => {
+      this.merge({ processing })
+    }
+    const changeTab = (activeTab: string) => () => {
+      this.changeTab(activeTab)
+    }
+    const getMoveTaskList = () => {
+      const images = tools.filterImages(
+        this.extensions,
+        false,
+        true,
+      )(this.imageList)
 
-    tools.serialPromise(tasks)
+      return images.map((item: any) => () =>
+        tools
+          .createImageDir(this.selectedDir, item)
+          .then(tools.moveImage(item)),
+      )
+    }
+    const readDir = (dir: string) => () => this.readDir(dir)
+
+    tools.serialPromise([
+      saveProcessing(true),
+      ...getMoveTaskList(),
+      readDir(this.selectedDir),
+      changeTab('all'),
+      saveProcessing(false),
+    ])
   }
 
   // 选择照片目录
   chooseDir = () => {
-    // 选择目录名
-    const selectDir = (selectedDir: any[] | string) =>
-      Array.isArray(selectedDir) ? selectedDir[0] : selectedDir
     // 保存所选目录路径
-    const saveSelectedDir = (selectedDir: string) => {
+    const saveSelectedDir = (selectedDir: any[] | string) => {
+      selectedDir = Array.isArray(selectedDir) ? selectedDir[0] : selectedDir
       this.merge({ selectedDir })
-      return selectedDir
+      return selectedDir as string
     }
     const saveLoading = (loading: boolean) => (selectedDir = '') => {
       this.merge({ loading })
       return selectedDir
     }
+    const cleanResult = (selectedDir: any) => {
+      this.cleanResult()
+      return selectedDir
+    }
 
     dialog
       .open({ directory: true })
-      .then(selectDir)
-      .then(saveLoading(true))
+      .then(cleanResult)
       .then(saveSelectedDir)
+      .then(saveLoading(true))
       .then(this.readDir)
       .finally(saveLoading(false))
   }
