@@ -1,7 +1,7 @@
 {
   "package": {
     "productName": "PhotoCleanup",
-    "version": "0.0.1-alpha.3"
+    "version": "0.0.1-alpha.4"
   },
   "build": {
     "distDir": "../build",
@@ -34,7 +34,7 @@
       },
       "macOS": {
         "frameworks": [],
-        "minimumSystemVersion": "11",
+        "minimumSystemVersion": "10",
         "useBootstrapper": false,
         "exceptionDomain": "",
         "signingIdentity": null,
