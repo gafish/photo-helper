@@ -48,6 +48,9 @@ export class Store {
   // 文件整理中
   processing = false
 
+  // 是否复制结果到新目录
+  copyToNewDir = true
+
   // 禁用状态
   get disabled() {
     return this.loading || this.finding || this.processing
@@ -112,6 +115,7 @@ export class Store {
       repeatList: [],
       selectedDir: '',
       activeTab: 'all',
+      copyToNewDir: true,
     })
   }
 
@@ -175,17 +179,23 @@ export class Store {
       )(this.imageList)
 
       return images.map((item: any) => () => {
+        const dir = this.copyToNewDir
+          ? `${this.selectedDir}/${resultDirName}`
+          : this.selectedDir
         const date = tools.getImageDate(item)
-        const copyFile = (item: any) => (dirPath: string) =>
+        const copyFile = (dirPath: string) =>
           fs.copyFile(item.file_path, `${dirPath}/${item.basename}`)
+        const removeFile = () =>
+          this.copyToNewDir ? Promise.resolve() : fs.removeFile(item.file_path)
         return tools
-          .createDir(`${this.selectedDir}/${resultDirName}`, date)
-          .then(copyFile(item))
+          .createDir(dir, date)
+          .then(copyFile)
+          .then(removeFile)
       })
     }
     const readDir = (dir: string) => () => this.readDir(dir)
     const createResultDir = () =>
-      tools.createDir(this.selectedDir, resultDirName)
+      this.copyToNewDir && tools.createDir(this.selectedDir, resultDirName)
 
     tools.serialPromise([
       saveProcessing(true),

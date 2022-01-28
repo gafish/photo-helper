@@ -6,13 +6,13 @@ import BtnCleanupPhoto from './BtnCleanupPhoto'
 import BtnFindRepeat from './BtnFindRepeat'
 import BtnClean from './BtnClean'
 import ExtFilter from './ExtFilter'
+import DirOption from './DirOption'
 
 interface IProps {
-  finding: boolean
-  repeatList?: any[]
+  showOptions: boolean
 }
 
-export const ToolBar: FC<IProps> = ({ finding = false, repeatList = [] }) => {
+export const ToolBar: FC<IProps> = ({ showOptions = true }) => {
   return (
     <div className="py-3">
       <div className="mt-1">
@@ -20,12 +20,16 @@ export const ToolBar: FC<IProps> = ({ finding = false, repeatList = [] }) => {
         <BtnFindRepeat />
         <BtnClean />
       </div>
-      {!(finding || repeatList.length > 0) && <ExtFilter />}
+      {showOptions && (
+        <div>
+          <ExtFilter />
+          <DirOption />
+        </div>
+      )}
     </div>
   )
 }
 
 export default inject(store => ({
-  finding: store.finding,
-  repeatList: store.repeatList,
+  showOptions: store.activeTab === 'all' && !store.finding,
 }))(ToolBar)
