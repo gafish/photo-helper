@@ -47,7 +47,6 @@ jobs:
       - name: Yarn install and check
         run: |
           yarn install --network-timeout 1000000
-          yarn run check
 
       - name: Tauri build
         uses: tauri-apps/tauri-action@v0
@@ -84,9 +83,3 @@ jobs:
 
       - name: Yarn install
         run: yarn
-
-      - name: Release update.json
-        run: yarn run release
-        continue-on-error: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
