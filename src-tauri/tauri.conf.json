@@ -48,7 +48,7 @@
     },
     "updater": {
       "active": true,
-      "endpoints": ["https://raw.githubusercontent.com/gafish/photo-cleanup-app/main/updater.json"],
+      "endpoints": ["https://gist.githubusercontent.com/gafish/2abe5dba895efdc1f3ee09af3698b47e/raw"],
       "dialog": true
     },
     "allowlist": {
