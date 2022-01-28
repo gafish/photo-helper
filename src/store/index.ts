@@ -160,6 +160,7 @@ export class Store {
 
   // 整理照片
   cleanupPhotos = () => {
+    const resultDirName = '_整理结果_'
     const saveProcessing = (processing: boolean) => () => {
       this.merge({ processing })
     }
@@ -173,16 +174,22 @@ export class Store {
         true,
       )(this.imageList)
 
-      return images.map((item: any) => () =>
-        tools
-          .createImageDir(this.selectedDir, item)
-          .then(tools.moveImage(item)),
-      )
+      return images.map((item: any) => () => {
+        const date = tools.getImageDate(item)
+        const copyFile = (item: any) => (dirPath: string) =>
+          fs.copyFile(item.file_path, `${dirPath}/${item.basename}`)
+        return tools
+          .createDir(`${this.selectedDir}/${resultDirName}`, date)
+          .then(copyFile(item))
+      })
     }
     const readDir = (dir: string) => () => this.readDir(dir)
+    const createResultDir = () =>
+      tools.createDir(this.selectedDir, resultDirName)
 
     tools.serialPromise([
       saveProcessing(true),
+      createResultDir(),
       ...getMoveTaskList(),
       readDir(this.selectedDir),
       changeTab('all'),

@@ -63,21 +63,13 @@ export const getImageDate = (item: any) => {
   )}`
 }
 
-// 创建图片目录
-export const createImageDir = (selectedDir: string, item: any) => {
-  const date = getImageDate(item)
-  const dirPath = `${selectedDir}/${date}`
+// 创建目录
+export const createDir = (rootDir: string, dirName: string) => {
+  const dirPath = `${rootDir}/${dirName}`
 
   return invoke.isDir(dirPath).then(result => {
     if (!result) return fs.createDir(dirPath).then(() => dirPath)
     return dirPath
-  })
-}
-
-// 移动图片至目录
-export const moveImage = (item: any) => (dirPath: string) => {
-  return fs.copyFile(item.file_path, `${dirPath}/${item.basename}`).then(() => {
-    fs.removeFile(item.file_path)
   })
 }
 
