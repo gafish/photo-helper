@@ -12,9 +12,6 @@ jobs:
       matrix:
         os: [windows-latest, macos-11]
     runs-on: ${{ matrix.os }}
-    if: |
-      startsWith(github.repository, 'zzzgydi') &&
-      startsWith(github.ref, 'refs/tags/v')
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -68,9 +65,6 @@ jobs:
   release-update:
     needs: release
     runs-on: macos-11
-    if: |
-      startsWith(github.repository, 'zzzgydi') &&
-      startsWith(github.ref, 'refs/tags/v')
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
