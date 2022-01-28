@@ -1,0 +1,9 @@
+{
+    "name":"v0.0.1-alpha.3",
+    "notes":"v0.0.1-alpha.3 is published",
+    "platforms": {
+        "darwin": {
+            "url":"https://github.com/gafish/photo-cleanup-app/releases/download/v0.0.1-alpha.3/PhotoCleanup_0.0.1-alpha.3_x64.dmg"
+        }
+    }
+}
