@@ -1,6 +1,8 @@
 name: CI
 
-on: [push]
+on:
+  push:
+    branches: [ main ]
 
 env:
   CARGO_INCREMENTAL: 0
