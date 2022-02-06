@@ -23,7 +23,7 @@ export const List: FC<IProps> = ({
   onClickTab = () => {},
 }) => {
   const tabs = [
-    { text: '所有文件列表', name: 'all' },
+    { text: '影像文件列表', name: 'all' },
     repeatList.length ? { text: '重复照片列表', name: 'repeat' } : null,
   ]
   return (

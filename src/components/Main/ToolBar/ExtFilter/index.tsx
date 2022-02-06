@@ -24,7 +24,7 @@ export const ExtFilter: FC<IProps> = ({
 
   return (
     <div className="flex items-center text-sm">
-      <span className="pr-5">照片格式过滤:</span>
+      <span className="pr-5">文件格式过滤:</span>
       {extensions.map(item => (
         <label className="cursor-pointer label mr-2" key={item.ext}>
           <span className="label-text pr-1">.{item.ext}</span>
