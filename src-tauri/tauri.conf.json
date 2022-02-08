@@ -1,6 +1,6 @@
 {
   "package": {
-    "productName": "PhotoCleanup",
+    "productName": "PhotoHelper",
     "version": "0.1.0"
   },
   "build": {
@@ -14,7 +14,7 @@
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "com.gafish.photoCleanup",
+      "identifier": "com.gafish.PhotoHelper",
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
@@ -56,7 +56,7 @@
     },
     "windows": [
       {
-        "title": "照片整理大师",
+        "title": "照片整理小助手",
         "width": 800,
         "height": 600,
         "resizable": true,

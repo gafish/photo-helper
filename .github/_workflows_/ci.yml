@@ -61,7 +61,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tagName: v__VERSION__
-          releaseName: "PhotoCleanup v__VERSION__"
-          releaseBody: "PhotoCleanup now supports Windows and macos(intel)."
+          releaseName: "PhotoHelper v__VERSION__"
+          releaseBody: "PhotoHelper now supports Windows and macos(intel)."
           releaseDraft: false
           prerelease: true

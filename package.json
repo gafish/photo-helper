@@ -1,5 +1,5 @@
 {
-  "name": "photo-cleanup",
+  "name": "photo-helper",
   "private": true,
   "scripts": {
     "start": "react-scripts start",
