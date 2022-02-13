@@ -1,6 +1,7 @@
 import { FC, useCallback, ChangeEvent } from 'react'
 
 import inject from 'hoc/inject'
+import { record } from 'utils/umeng'
 
 interface IProps {
   extensions?: any[]
@@ -17,6 +18,7 @@ export const ExtFilter: FC<IProps> = ({
     (e: ChangeEvent<HTMLInputElement>) => {
       const { value, checked } = e.target
       const ext = value.trim()
+      record('ext_filter', { ext, checked })
       onExtChange(ext, checked)
     },
     [onExtChange],

@@ -2,6 +2,7 @@ import { FC } from 'react'
 import classnames from 'classnames'
 
 import inject from 'hoc/inject'
+import { record } from 'utils/umeng'
 
 interface IProps {
   onClick?: () => void
@@ -17,7 +18,10 @@ export const BtnCleanupPhoto: FC<IProps> = ({
   return (
     <button
       className={classnames('btn btn-outline btn-sm', { loading })}
-      onClick={onClick}
+      onClick={() => {
+        record('btn_cleanup_photo')
+        onClick()
+      }}
       disabled={disabled}
     >
       一键整理

@@ -1,6 +1,7 @@
 import { FC } from 'react'
 
 import inject from 'hoc/inject'
+import { record } from 'utils/umeng'
 
 interface IProps {
   onClick?: () => void
@@ -14,7 +15,10 @@ export const BtnClean: FC<IProps> = ({
   return (
     <button
       className="btn btn-ghost btn-xs ml-1"
-      onClick={onClick}
+      onClick={() => {
+        record('btn_clean')
+        onClick()
+      }}
       disabled={disabled}
     >
       清空结果

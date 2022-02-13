@@ -1,10 +1,11 @@
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 
 import inject from 'hoc/inject'
 import Entry from 'components/Entry'
 import Main from 'components/Main'
 import Version from 'components/Version'
 import Loading from 'components/Loading'
+import { sendPV } from 'utils/umeng'
 
 interface IProps {
   imageList?: any[]
@@ -12,6 +13,10 @@ interface IProps {
 }
 
 export const App: FC<IProps> = ({ imageList = [], loading = false }) => {
+  useEffect(() => {
+    sendPV()
+  }, [])
+
   if (loading) return <Loading />
 
   return (

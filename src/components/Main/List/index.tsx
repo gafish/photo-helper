@@ -2,6 +2,7 @@ import React, { FC } from 'react'
 import classnames from 'classnames'
 
 import inject from 'hoc/inject'
+import { record } from 'utils/umeng'
 
 import ImageList from './ImageList'
 import RepeatList from './RepeatList'
@@ -37,7 +38,10 @@ export const List: FC<IProps> = ({
                   'tab-active': item.name === activeTab,
                 })}
                 key={item.name}
-                onClick={() => onClickTab(item.name)}
+                onClick={() => {
+                  record('tab_click', { tab: item.name })
+                  onClickTab(item.name)
+                }}
               >
                 {item.text}
               </a>

@@ -2,6 +2,7 @@ import { FC } from 'react'
 import classnames from 'classnames'
 
 import inject from 'hoc/inject'
+import { record } from 'utils/umeng'
 
 interface IProps {
   loading: boolean
@@ -19,7 +20,10 @@ export const BtnFindRepeat: FC<IProps> = ({
       className={classnames('btn btn-outline btn-sm ml-1', {
         loading,
       })}
-      onClick={onClick}
+      onClick={() => {
+        record('btn_find_repeat')
+        onClick()
+      }}
       disabled={disabled}
     >
       查找重复照片

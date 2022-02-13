@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { app } from '@tauri-apps/api'
 
+import { record } from 'utils/umeng'
+
 export const Version = () => {
   const [version, setVersion] = useState('')
 
@@ -14,6 +16,7 @@ export const Version = () => {
       href="https://github.com/gafish/photo-helper/releases"
       target="_blank"
       rel="noreferrer"
+      onClick={() => record('link_version', { version })}
     >
       v{version}
     </a>

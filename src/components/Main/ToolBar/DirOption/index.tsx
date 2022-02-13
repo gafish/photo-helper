@@ -1,6 +1,7 @@
 import { FC } from 'react'
 
 import inject from 'hoc/inject'
+import { record } from 'utils/umeng'
 
 interface IProps {
   onChange?: (checked: boolean) => void
@@ -18,7 +19,10 @@ export const DirOption: FC<IProps> = ({
         type="checkbox"
         checked={value}
         className="checkbox checkbox-xs"
-        onChange={e => onChange(e.target.checked)}
+        onChange={e => {
+          record('dir_option', { checked: e.target.checked })
+          onChange(e.target.checked)
+        }}
         // disabled={disabled}
       />
     </div>

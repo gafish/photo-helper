@@ -6,7 +6,7 @@ export const Head = () => {
   return (
     <div className="flex justify-between items-end pb-2 border-b">
       <div className="flex justify-between items-end">
-        <BtnChooseDir size="sm" />
+        <BtnChooseDir size="sm" clickSource="head" />
         <DirName />
       </div>
       <Total />
