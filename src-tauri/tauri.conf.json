@@ -1,7 +1,7 @@
 {
   "package": {
     "productName": "PhotoHelper",
-    "version": "0.1.0"
+    "version": "0.2.0"
   },
   "build": {
     "distDir": "../build",
@@ -34,7 +34,7 @@
       },
       "macOS": {
         "frameworks": [],
-        "minimumSystemVersion": "",
+        "minimumSystemVersion": "10.13",
         "useBootstrapper": false,
         "exceptionDomain": "",
         "signingIdentity": null,
