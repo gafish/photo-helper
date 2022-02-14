@@ -34,7 +34,7 @@
       },
       "macOS": {
         "frameworks": [],
-        "minimumSystemVersion": "10.13",
+        "minimumSystemVersion": "",
         "useBootstrapper": false,
         "exceptionDomain": "",
         "signingIdentity": null,
