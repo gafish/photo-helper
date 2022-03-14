@@ -1,7 +1,7 @@
 {
   "package": {
     "productName": "PhotoHelper",
-    "version": "0.2.0"
+    "version": "0.2.1"
   },
   "build": {
     "distDir": "../build",
@@ -16,11 +16,9 @@
       "targets": "all",
       "identifier": "com.gafish.PhotoHelper",
       "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
         "icons/icon.icns",
-        "icons/icon.ico"
+        "icons/icon.ico",
+        "icons/icon.png"
       ],
       "resources": [],
       "externalBin": [],
